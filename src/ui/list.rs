@@ -3,7 +3,7 @@ use ratatui::{
     layout::{Constraint, Layout, Rect},
     style::{Color, Style, Stylize},
     symbols::border,
-    widgets::{Block, Borders, ListState, Paragraph},
+    widgets::{Block, Borders, Paragraph, Widget},
 };
 
 pub fn render_menu_list(
@@ -32,7 +32,9 @@ pub fn render_menu_list(
         let mut paragraph = Paragraph::new(text.as_str()).centered().block(block);
 
         if is_selected {
-            paragraph.bold();
+            paragraph = paragraph.bold();
         }
+
+        paragraph.render(*chunk, buf);
     }
 }

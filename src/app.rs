@@ -48,6 +48,7 @@ impl App {
             KeyCode::Char('k') => Action::Up,
             KeyCode::Char('j') => Action::Down,
             KeyCode::Char('l') | KeyCode::Char('h') => Action::Done,
+            KeyCode::Char('n') => Action::New,
             _ => Action::None,
         }
     }
@@ -58,6 +59,7 @@ impl App {
             Action::Up => self.list.up(),
             Action::Down => self.list.down(),
             Action::Done => self.list.done(),
+            Action::New => self.list.done(),
             Action::Tick | Action::None => {}
         }
     }
