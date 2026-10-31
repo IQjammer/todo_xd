@@ -4,7 +4,11 @@ pub enum Action {
     Up,
     Down,
     Done,
-    New,
+    EnterNormalMode,
+    EnterEditingMode,
+    InsertChar(char),
+    DeleteChar,
+    SubmitInput,
     Tick,
     None,
 }

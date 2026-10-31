@@ -5,10 +5,18 @@ use ratatui::{DefaultTerminal, Frame};
 
 use crate::{action::Action, list::List, ui};
 
+#[derive(Default, PartialEq, Eq)]
+pub enum InputMode {
+    #[default]
+    Normal,
+    Editing,
+}
+
 #[derive(Default)]
 pub struct App {
     pub exit: bool,
     pub list: List,
+    pub mode: InputMode,
 }
 
 impl App {
@@ -43,13 +51,22 @@ impl App {
     }
 
     fn map_key_to_action(&self, key: KeyEvent) -> Action {
-        match key.code {
-            KeyCode::Char('q') | KeyCode::Esc => Action::Quit,
-            KeyCode::Char('k') => Action::Up,
-            KeyCode::Char('j') => Action::Down,
-            KeyCode::Char('l') | KeyCode::Char('h') => Action::Done,
-            KeyCode::Char('n') => Action::New,
-            _ => Action::None,
+        match self.mode {
+            InputMode::Normal => match key.code {
+                KeyCode::Char('q') | KeyCode::Esc => Action::Quit,
+                KeyCode::Char('k') => Action::Up,
+                KeyCode::Char('j') => Action::Down,
+                KeyCode::Char('l') | KeyCode::Char('h') => Action::Done,
+                KeyCode::Char('n') => Action::EnterEditingMode,
+                _ => Action::None,
+            }
+            InputMode::Editing => match key.code {
+                KeyCode::Enter => Action::SubmitInput,
+                KeyCode::Esc => Action::EnterNormalMode,
+                KeyCode::Backspace => Action::DeleteChar,
+                KeyCode::Char(c) => Action::InsertChar(c),
+                _ => Action::None,
+            }
         }
     }
 
@@ -59,7 +76,21 @@ impl App {
             Action::Up => self.list.up(),
             Action::Down => self.list.down(),
             Action::Done => self.list.done(),
-            Action::New => self.list.done(),
+
+            Action::EnterEditingMode => self.mode = InputMode::Editing,
+            Action::EnterNormalMode => {
+                self.list.input.clear();
+                self.mode = InputMode::Normal;
+            }
+            Action::InsertChar(c) => self.list.input.push(c),
+            Action::DeleteChar => {
+                self.list.input.pop();
+            }
+            Action::SubmitInput => {
+                self.list.new();
+                self.mode = InputMode::Normal;
+            }
+
             Action::Tick | Action::None => {}
         }
     }

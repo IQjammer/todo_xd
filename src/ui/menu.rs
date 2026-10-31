@@ -7,7 +7,7 @@ use ratatui::{
 };
 
 use super::list;
-use crate::app::App;
+use crate::{app::{App, InputMode}, ui::input};
 
 pub fn render_menu(app: &App, area: Rect, buf: &mut Buffer) {
     let block = Block::bordered()
@@ -23,4 +23,8 @@ pub fn render_menu(app: &App, area: Rect, buf: &mut Buffer) {
         inner_area,
         buf,
     );
+
+    if app.mode == InputMode::Editing {
+        input::render_input_popup(&app.list.input, area, buf);
+    }
 }

@@ -1,4 +1,5 @@
 mod list;
+mod input;
 mod menu;
 
 use crate::App;
