@@ -59,10 +59,15 @@ impl List {
         if let Some(i) = self.list_state.selected()
             && !self.items.is_empty()
         {
-            self.items.remove(i);
-            if self.items.is_empty() {
-                self.list_state.select(None);
-            } else if i >= self.items.len() {
+            if self.items[i].completed {
+                self.items[i].completed = false;
+            } else {
+                let mut item = self.items.remove(i);
+                item.completed = true;
+                self.items.push(item);
+            }
+
+            if i >= self.items.len() {
                 self.list_state.select(Some(self.items.len() - 1));
             }
         }
@@ -71,11 +76,19 @@ impl List {
     pub fn add(&mut self) {
         let trimmed = self.input.trim();
         if !trimmed.is_empty() {
-            self.items.push(TodoItem {
+            let new_item = TodoItem {
                 text: trimmed.to_string(),
                 completed: false,
-            });
-            self.list_state.select(Some(self.items.len() - 1));
+            };
+
+            let insert_idx = self
+                .items
+                .iter()
+                .position(|item| item.completed)
+                .unwrap_or(self.items.len());
+
+            self.items.insert(insert_idx, new_item);
+            self.list_state.select(Some(insert_idx));
             self.input.clear();
         }
     }
