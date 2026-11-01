@@ -68,7 +68,7 @@ impl List {
         }
     }
 
-    pub fn new(&mut self) {
+    pub fn add(&mut self) {
         let trimmed = self.input.trim();
         if !trimmed.is_empty() {
             self.items.push(TodoItem {

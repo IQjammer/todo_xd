@@ -59,14 +59,14 @@ impl App {
                 KeyCode::Char('l') | KeyCode::Char('h') => Action::Done,
                 KeyCode::Char('n') => Action::EnterEditingMode,
                 _ => Action::None,
-            }
+            },
             InputMode::Editing => match key.code {
                 KeyCode::Enter => Action::SubmitInput,
                 KeyCode::Esc => Action::EnterNormalMode,
                 KeyCode::Backspace => Action::DeleteChar,
                 KeyCode::Char(c) => Action::InsertChar(c),
                 _ => Action::None,
-            }
+            },
         }
     }
 
@@ -87,7 +87,7 @@ impl App {
                 self.list.input.pop();
             }
             Action::SubmitInput => {
-                self.list.new();
+                self.list.add();
                 self.mode = InputMode::Normal;
             }
 
