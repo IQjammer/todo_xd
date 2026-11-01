@@ -59,16 +59,31 @@ impl List {
         if let Some(i) = self.list_state.selected()
             && !self.items.is_empty()
         {
-            if self.items[i].completed {
-                self.items[i].completed = false;
+            let mut item = self.items.remove(i);
+
+            if item.completed {
+                item.completed = false;
+
+                let insert_idx = self
+                    .items
+                    .iter()
+                    .position(|it| it.completed)
+                    .unwrap_or(self.items.len());
+
+                self.items.insert(insert_idx, item);
+                self.list_state.select(Some(insert_idx));
             } else {
-                let mut item = self.items.remove(i);
                 item.completed = true;
                 self.items.push(item);
-            }
 
-            if i >= self.items.len() {
-                self.list_state.select(Some(self.items.len() - 1));
+                let new_selected = if self.items.is_empty() {
+                    None
+                } else if i >= self.items.len() {
+                    Some(self.items.len() - 1)
+                } else {
+                    Some(i)
+                };
+                self.list_state.select(new_selected);
             }
         }
     }
