@@ -9,6 +9,7 @@ pub enum Action {
     InsertChar(char),
     DeleteChar,
     SubmitInput,
+    Delete,
     Tick,
     None,
 }

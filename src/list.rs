@@ -88,6 +88,22 @@ impl List {
         }
     }
 
+    pub fn delete(&mut self) {
+        if let Some(i) = self.list_state.selected() && !self.items.is_empty() {
+            self.items.remove(i);
+
+            let new_selected = if self.items.is_empty() {
+                None
+            } else if i >= self.items.len() {
+                    Some(self.items.len() -1)
+            } else {
+                    Some(i)
+            };
+
+            self.list_state.select(new_selected);
+        }
+    }
+
     pub fn add(&mut self) {
         let trimmed = self.input.trim();
         if !trimmed.is_empty() {

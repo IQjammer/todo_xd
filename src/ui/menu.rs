@@ -17,7 +17,7 @@ pub fn render_menu(app: &App, area: Rect, buf: &mut Buffer) {
         .border_set(border::THICK)
         .title(" RustTODO ".bold())
         .title_bottom(
-            Line::from(" [h/l] to done | [j/k] to up/down | [n] to new ")
+            Line::from(" [h/l] to done | [j/k] to up/down | [n] to new | [r] to remove ")
                     .style(Style::default())
                     .alignment(Alignment::Center),
         )

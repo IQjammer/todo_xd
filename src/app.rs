@@ -57,6 +57,7 @@ impl App {
                 KeyCode::Char('k') => Action::Up,
                 KeyCode::Char('j') => Action::Down,
                 KeyCode::Char('l') | KeyCode::Char('h') => Action::Done,
+                KeyCode::Char('r') => Action::Delete,
                 KeyCode::Char('n') => Action::EnterEditingMode,
                 _ => Action::None,
             },
@@ -76,6 +77,7 @@ impl App {
             Action::Up => self.list.up(),
             Action::Down => self.list.down(),
             Action::Done => self.list.done(),
+            Action::Delete => self.list.delete(),
 
             Action::EnterEditingMode => self.mode = InputMode::Editing,
             Action::EnterNormalMode => {
