@@ -1,21 +1,34 @@
 use ratatui::{
     buffer::Buffer,
-    layout::Rect,
+    style::Style,
+    layout::{Alignment, Rect},
     style::Stylize,
     symbols::border,
-    widgets::{Block, Widget},
+    text::Line,
+    widgets::{Block, Borders, Widget}
 };
 
 use super::list;
 use crate::{app::{App, InputMode}, ui::input};
 
 pub fn render_menu(app: &App, area: Rect, buf: &mut Buffer) {
-    let block = Block::bordered()
+    let main_block = Block::default()
+        .borders(Borders::ALL)
         .border_set(border::THICK)
-        .title(" RustTODO ".bold());
+        .title(" RustTODO ".bold())
+        .title_bottom(
+            Line::from(" [h/l] to done | [j/k] to up/down | [n] to new ")
+                    .style(Style::default())
+                    .alignment(Alignment::Center),
+        )
+        .title_top(
+            Line::from(" [q] to quit ")
+                    .style(Style::default())
+                    .alignment(Alignment::Right),
+        );
 
-    let inner_area = block.inner(area);
-    block.render(area, buf);
+    let inner_area = main_block.inner(area);
+    main_block.render(area, buf);
 
     list::render_menu_list(
         &app.list.items,
